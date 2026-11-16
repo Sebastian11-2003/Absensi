@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil Saya - SMASVP</title>
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="/css/guru.css">
+</head>
+<body>
+
+<div class="admin-layout">
+
+    <%- include('partials/sidebar', { activePage: 'profil' }) %>
+
+    <main class="main-content">
+
+        <%- include('partials/header', {
+            murid,
+            pageTitle: 'Profil Saya',
+            pageSubtitle: 'Informasi data pribadi dan akun Murid'
+        }) %>
+
+        <section class="dashboard-content">
+
+            <% const akunAktif = murid.status === 'aktif' || murid.status === 'active'; %>
+
+            <div class="profile-welcome">
+                <div class="profile-avatar">
+                    <%= murid.nama_murid.charAt(0).toUpperCase() %>
+                </div>
+
+                <div class="profile-welcome-info">
+                    <span class="welcome-label">PROFIL MURID</span>
+                    <h1><%= murid.nama_murid %></h1>
+                    <p>Informasi akun dan data pribadi Anda di SMASVP.</p>
+                </div>
+
+                <div class="profile-status">
+                    <% if (akunAktif) { %>
+                        <span class="profile-status-badge active">● Aktif</span>
+                    <% } else { %>
+                        <span class="profile-status-badge inactive">● Nonaktif</span>
+                    <% } %>
+                </div>
+            </div>
+
+            <!-- DATA PRIBADI -->
+            <div class="section-heading">
+                <div>
+                    <h2>Informasi Pribadi</h2>
+                    <p>Informasi identitas Murid yang terdaftar di sistem</p>
+                </div>
+            </div>
+
+            <div class="profile-card">
+
+                <div class="profile-card-header">
+                    <div class="profile-card-icon">♙</div>
+
+                    <div>
+                        <h3>Data Identitas</h3>
+                        <p>Informasi pribadi Murid</p>
+                    </div>
+                </div>
+
+                <div class="profile-information">
+
+                    <div class="profile-field">
+                        <span>Nama Lengkap</span>
+                        <strong><%= murid.nama_murid %></strong>
+                    </div>
+
+                    <div class="profile-field">
+                        <span>Jenis Kelamin</span>
+                        <strong>
+                            <%= murid.jenis_kelamin === 'L'
+                                ? 'Laki-laki'
+                                : murid.jenis_kelamin === 'P'
+                                    ? 'Perempuan'
+                                    : '-' %>
+                        </strong>
+                    </div>
+
+                    <div class="profile-field">
+                        <span>ID Murid</span>
+                        <strong>#<%= murid.id %></strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- KELAS -->
+            <div class="section-heading profile-section-heading">
+                <div>
+                    <h2>Informasi Kelas</h2>
+                    <p>Kelas tempat Anda terdaftar</p>
+                </div>
+            </div>
+
+            <div class="profile-card">
+
+                <div class="profile-card-header">
+                    <div class="profile-card-icon">♧</div>
+
+                    <div>
+                        <h3>Data Kelas</h3>
+                        <p>Kelas yang diikuti saat ini</p>
+                    </div>
+                </div>
+
+                <div class="profile-information">
+
+                    <div class="profile-field">
+                        <span>Nama Kelas</span>
+                        <strong><%= murid.nama_kelas %></strong>
+                    </div>
+
+                    <div class="profile-field">
+                        <span>Tingkat</span>
+                        <strong><%= murid.tingkat %></strong>
+                    </div>
+
+                    <div class="profile-field">
+                        <span>Jurusan</span>
+                        <strong><%= murid.jurusan || '-' %></strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- AKUN -->
+            <div class="section-heading profile-section-heading">
+                <div>
+                    <h2>Informasi Akun</h2>
+                    <p>Informasi akses akun Murid SMASVP</p>
+                </div>
+            </div>
+
+            <div class="profile-card">
+
+                <div class="profile-card-header">
+                    <div class="profile-card-icon account">⚙</div>
+
+                    <div>
+                        <h3>Detail Akun</h3>
+                        <p>Informasi akun yang digunakan untuk masuk</p>
+                    </div>
+                </div>
+
+                <div class="profile-information">
+
+                    <div class="profile-field">
+                        <span>Username</span>
+                        <strong><%= murid.username %></strong>
+                    </div>
+
+                    <div class="profile-field">
+                        <span>Role Akun</span>
+                        <strong>Murid</strong>
+                    </div>
+
+                    <div class="profile-field">
+                        <span>Status Akun</span>
+                        <strong><%= akunAktif ? 'Aktif' : 'Nonaktif' %></strong>
+                    </div>
+
+                </div>
+
+                <div class="profile-security-note">
+                    <span class="security-icon">ⓘ</span>
+                    <p>
+                        Data profil ini hanya dapat dikelola oleh Administrator.
+                        Hubungi Administrator apabila terdapat informasi yang
+                        perlu diperbaiki.
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="dashboard-footer">
+                <span>© 2026 SMASVP</span>
+                <span>Sistem Informasi Absensi Sekolah</span>
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script src="/js/guru.js"></script>
+
+</body>
+</html>

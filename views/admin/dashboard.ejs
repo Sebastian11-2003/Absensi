@@ -1,0 +1,142 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard Admin - SMASVP</title>
+
+    <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+
+    <div class="admin-layout">
+
+        <%- include('partials/sidebar') %>
+
+        <main class="main-content">
+
+            <%- include('partials/header') %>
+
+            <section class="dashboard-content">
+
+                <div class="welcome-section">
+                    <div>
+                        <span class="welcome-label">ADMINISTRATOR</span>
+                        <h1>Selamat Datang, <%= user.username %>!</h1>
+                        <p>Berikut ringkasan informasi dan data SMASVP.</p>
+                    </div>
+
+                    <div class="welcome-date">
+                        <span id="currentDate"></span>
+                    </div>
+                </div>
+
+                <div class="section-heading">
+                    <div>
+                        <h2>Ringkasan Sekolah</h2>
+                        <p>Informasi keseluruhan data sekolah</p>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+
+                    <div class="stat-card">
+                        <div class="stat-top">
+                            <div class="stat-icon blue">♙</div>
+                            <span class="stat-label">TENAGA PENDIDIK</span>
+                        </div>
+
+                        <h2><%= statistik.guru %></h2>
+                        <p>Total Guru Terdaftar</p>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-top">
+                            <div class="stat-icon purple">♧</div>
+                            <span class="stat-label">PESERTA DIDIK</span>
+                        </div>
+
+                        <h2><%= statistik.murid %></h2>
+                        <p>Total Murid Terdaftar</p>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-top">
+                            <div class="stat-icon orange">▤</div>
+                            <span class="stat-label">KELAS</span>
+                        </div>
+
+                        <h2><%= statistik.kelas %></h2>
+                        <p>Total Kelas Sekolah</p>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-top">
+                            <div class="stat-icon green">▧</div>
+                            <span class="stat-label">MATA PELAJARAN</span>
+                        </div>
+
+                        <h2><%= statistik.mapel %></h2>
+                        <p>Total Mata Pelajaran</p>
+                    </div>
+
+                </div>
+
+                <div class="section-heading account-heading">
+                    <div>
+                        <h2>Informasi Akun</h2>
+                        <p>Ringkasan akun pengguna sistem</p>
+                    </div>
+                </div>
+
+                <div class="account-grid">
+
+                    <div class="account-card">
+                        <div class="account-icon">♙</div>
+
+                        <div>
+                            <span>Total Akun</span>
+                            <h2><%= statistik.akun %></h2>
+                            <p>Seluruh pengguna sistem</p>
+                        </div>
+                    </div>
+
+                    <div class="account-card">
+                        <div class="account-icon active-icon">✓</div>
+
+                        <div>
+                            <span>Akun Aktif</span>
+                            <h2><%= statistik.aktif %></h2>
+                            <p>Akun dapat digunakan</p>
+                        </div>
+                    </div>
+
+                    <div class="account-card">
+                        <div class="account-icon inactive-icon">!</div>
+
+                        <div>
+                            <span>Akun Nonaktif</span>
+                            <h2><%= statistik.nonaktif %></h2>
+                            <p>Akun tidak dapat digunakan</p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="dashboard-footer">
+                    <span>© 2026 SMASVP</span>
+                    <span>Sistem Informasi Absensi Sekolah</span>
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+    <script src="/js/admin.js"></script>
+
+</body>
+</html>

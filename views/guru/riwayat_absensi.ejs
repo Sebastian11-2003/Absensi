@@ -1,0 +1,174 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Riwayat Absensi | SMASVP</title>
+
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="/css/guru.css">
+</head>
+<body>
+
+<div class="admin-layout">
+
+    <%- include('partials/sidebar', { activePage: 'riwayat_absensi' }) %>
+
+    <main class="main-content">
+
+        <%- include('partials/header', {
+            guru,
+            pageTitle: 'Riwayat Absensi',
+            pageSubtitle: 'Daftar absensi murid yang telah Anda catat'
+        }) %>
+
+        <div class="dashboard-content">
+
+            <div class="guru-history-heading">
+                <div>
+                    <h2>Riwayat Absensi</h2>
+                    <p>Lihat kembali catatan kehadiran murid berdasarkan jadwal dan tanggal.</p>
+                </div>
+
+                <a href="/guru/absensi" class="guru-history-back">
+                    <i class="fa-solid fa-clipboard-check"></i>
+                    Halaman Absensi
+                </a>
+            </div>
+
+            <div class="guru-history-summary">
+                <div class="guru-history-summary-icon">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                </div>
+
+                <div>
+                    <span>Total Riwayat</span>
+                    <strong><%= riwayat.length %></strong>
+                    <small>Catatan absensi yang pernah Anda buat</small>
+                </div>
+            </div>
+
+            <div class="guru-history-container">
+
+                <div class="guru-history-container-header">
+                    <div>
+                        <h3>Daftar Riwayat</h3>
+                        <p>Diurutkan dari tanggal terbaru</p>
+                    </div>
+                </div>
+
+                <% if (riwayat.length === 0) { %>
+
+                    <div class="guru-history-empty">
+                        <div class="guru-history-empty-icon">
+                            <i class="fa-solid fa-folder-open"></i>
+                        </div>
+
+                        <h3>Belum Ada Riwayat Absensi</h3>
+
+                        <p>
+                            Riwayat absensi yang Anda simpan akan muncul di halaman ini.
+                        </p>
+
+                        <a href="/guru/absensi">
+                            Buka Halaman Absensi
+                        </a>
+                    </div>
+
+                <% } else { %>
+
+                    <div class="guru-history-list">
+
+                        <% riwayat.forEach(item => { %>
+
+                            <div class="guru-history-card">
+
+                                <div class="guru-history-card-main">
+
+                                    <div class="guru-history-card-icon">
+                                        <i class="fa-solid fa-book-open"></i>
+                                    </div>
+
+                                    <div class="guru-history-card-info">
+
+                                        <h4><%= item.nama_mapel %></h4>
+
+                                        <p>
+                                            <%= item.nama_kelas %>
+                                            (<%= item.tingkat %> <%= item.jurusan %>)
+                                        </p>
+
+                                        <div class="guru-history-meta">
+                                            <span>
+                                                <i class="fa-regular fa-calendar"></i>
+                                                <%= item.hari %>, <%= item.tanggalTampil %>
+                                            </span>
+
+                                            <span>
+                                                <i class="fa-regular fa-clock"></i>
+                                                <%= item.jamMulai %> - <%= item.jamSelesai %>
+                                            </span>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="guru-history-card-stats">
+
+                                    <div class="guru-history-stat">
+                                        <strong><%= item.total_murid %></strong>
+                                        <span>Total</span>
+                                    </div>
+
+                                    <div class="guru-history-stat hadir">
+                                        <strong><%= item.hadir %></strong>
+                                        <span>Hadir</span>
+                                    </div>
+
+                                    <div class="guru-history-stat izin">
+                                        <strong><%= item.izin %></strong>
+                                        <span>Izin</span>
+                                    </div>
+
+                                    <div class="guru-history-stat sakit">
+                                        <strong><%= item.sakit %></strong>
+                                        <span>Sakit</span>
+                                    </div>
+
+                                    <div class="guru-history-stat alpa">
+                                        <strong><%= item.alpa %></strong>
+                                        <span>Alpa</span>
+                                    </div>
+
+                                </div>
+
+                                <a
+                                    href="/guru/riwayat-absensi/<%= item.jadwal_id %>/<%= item.tanggalISO %>"
+                                    class="guru-history-detail-btn"
+                                >
+                                    Lihat Detail
+                                    <i class="fa-solid fa-arrow-right"></i>
+                                </a>
+
+                            </div>
+
+                        <% }) %>
+
+                    </div>
+
+                <% } %>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+<script src="/js/guru.js"></script>
+
+</body>
+</html>

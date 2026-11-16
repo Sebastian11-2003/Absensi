@@ -1,0 +1,125 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f1f6fc;
+    min-height: 100vh;
+}
+
+.login-container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.login-card {
+    background: #ffffff;
+    width: 100%;
+    max-width: 420px;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 10px 35px rgba(30, 70, 120, 0.10);
+}
+
+.logo {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.logo h1 {
+    color: #2878d8;
+    font-size: 32px;
+    letter-spacing: 2px;
+}
+
+.logo p {
+    color: #8996a8;
+    margin-top: 7px;
+    font-size: 13px;
+}
+
+.login-heading {
+    margin-bottom: 25px;
+}
+
+.login-heading h2 {
+    color: #26364a;
+    font-size: 23px;
+    margin-bottom: 8px;
+}
+
+.login-heading p {
+    color: #8996a8;
+    font-size: 13px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    color: #34445a;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 9px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 13px 14px;
+    border: 1px solid #dce4ee;
+    border-radius: 8px;
+    outline: none;
+    font-size: 14px;
+}
+
+.form-group input:focus {
+    border-color: #2878d8;
+    box-shadow: 0 0 0 3px rgba(40, 120, 216, 0.10);
+}
+
+button {
+    width: 100%;
+    padding: 14px;
+    background: #2878d8;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #1765bd;
+}
+
+.alert-error {
+    background: #fff0f0;
+    border: 1px solid #ffd1d1;
+    color: #d33c3c;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 13px;
+}
+
+.login-footer {
+    text-align: center;
+    margin-top: 30px;
+    color: #8996a8;
+    font-size: 12px;
+}
+
+.login-footer span {
+    display: block;
+    margin-top: 5px;
+}

@@ -1,0 +1,134 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jadwal Mengajar - SMASVP</title>
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="/css/guru.css">
+</head>
+<body>
+
+<div class="admin-layout">
+
+    <%- include('partials/sidebar', { activePage: 'jadwal' }) %>
+
+    <main class="main-content">
+
+        <%- include('partials/header', {
+            guru,
+            pageTitle: 'Jadwal Mengajar',
+            pageSubtitle: 'Daftar jadwal pelajaran yang Anda ampu'
+        }) %>
+
+        <section class="dashboard-content">
+
+            <div class="page-intro">
+                <div>
+                    <span class="welcome-label">AKADEMIK</span>
+                    <h1>Jadwal Mengajar</h1>
+                    <p>Berikut seluruh jadwal mengajar yang telah ditetapkan Administrator.</p>
+                </div>
+            </div>
+
+            <div class="schedule-overview">
+
+                <div class="overview-card">
+                    <span>Total Jadwal</span>
+                    <strong><%= jadwal.length %></strong>
+                    <p>Jadwal mengajar terdaftar</p>
+                </div>
+
+                <div class="overview-card">
+                    <span>Nama Guru</span>
+                    <strong class="teacher-name"><%= guru.nama_guru %></strong>
+                    <p>Guru pengampu mata pelajaran</p>
+                </div>
+
+            </div>
+
+            <div class="section-heading schedule-heading">
+                <div>
+                    <h2>Daftar Jadwal Pelajaran</h2>
+                    <p>Jadwal Senin sampai Sabtu</p>
+                </div>
+            </div>
+
+            <div class="table-container">
+
+                <table class="guru-table">
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>Hari</th>
+                            <th>Waktu</th>
+                            <th>Mata Pelajaran</th>
+                            <th>Kelas</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <% if (jadwal.length === 0) { %>
+
+                            <tr>
+                                <td colspan="5" class="empty-table">
+                                    Belum ada jadwal mengajar yang ditetapkan.
+                                </td>
+                            </tr>
+
+                        <% } else { %>
+
+                            <% jadwal.forEach((item, index) => { %>
+
+                                <tr>
+                                    <td><%= index + 1 %></td>
+
+                                    <td>
+                                        <span class="day-badge">
+                                            <%= item.hari %>
+                                        </span>
+                                    </td>
+
+                                    <td class="time-cell">
+                                        <%= String(item.jam_mulai).slice(0, 5) %>
+                                        -
+                                        <%= String(item.jam_selesai).slice(0, 5) %>
+                                    </td>
+
+                                    <td>
+                                        <strong><%= item.nama_mapel %></strong>
+                                    </td>
+
+                                    <td>
+                                        <span class="class-badge">
+                                            <%= item.nama_kelas %>
+                                        </span>
+                                    </td>
+                                </tr>
+
+                            <% }) %>
+
+                        <% } %>
+
+                    </tbody>
+                </table>
+
+            </div>
+
+            <div class="dashboard-footer">
+                <span>© 2026 SMASVP</span>
+                <span>Sistem Informasi Absensi Sekolah</span>
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script src="/js/guru.js"></script>
+
+</body>
+</html>

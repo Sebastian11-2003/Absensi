@@ -1,0 +1,40 @@
+
+/* ======================================
+   INPUT MODAL MAPEL
+====================================== */
+
+.modal-content input[type="text"] {
+    width: 100%;
+    padding: 11px 12px;
+    border: 1px solid #dce3ed;
+    border-radius: 7px;
+    outline: none;
+    font-size: 14px;
+    background: white;
+}
+
+.modal-content input[type="text"]:focus {
+    border-color: #2878f0;
+}
+
+/* ======================================
+   STATUS MAPEL
+====================================== */
+
+.badge-status {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.badge-status.dipakai {
+    background: #eaf8ef;
+    color: #2f9e5b;
+}
+
+.badge-status.belum {
+    background: #f1f3f7;
+    color: #8491a5;
+}

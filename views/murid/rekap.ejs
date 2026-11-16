@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rekap Kehadiran - SMASVP</title>
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="/css/guru.css">
+</head>
+<body>
+
+<div class="admin-layout">
+
+    <%- include('partials/sidebar', { activePage: 'rekap' }) %>
+
+    <main class="main-content">
+
+        <%- include('partials/header', {
+            murid,
+            pageTitle: 'Rekap Kehadiran',
+            pageSubtitle: 'Ringkasan kehadiran Anda berdasarkan periode mingguan'
+        }) %>
+
+        <section class="dashboard-content">
+
+            <div class="page-intro guru-rekap-intro">
+                <div>
+                    <span class="welcome-label">AKADEMIK</span>
+                    <h1>Rekap Kehadiran Saya</h1>
+                    <p>Pantau kehadiran Anda pada setiap mata pelajaran setiap minggunya.</p>
+                </div>
+            </div>
+
+            <!-- FILTER PERIODE -->
+            <div class="guru-rekap-filter">
+
+                <div class="guru-rekap-filter-heading">
+                    <div>
+                        <h3>Periode Rekap</h3>
+                        <p>Pilih minggu untuk melihat rekap kehadiran.</p>
+                    </div>
+                </div>
+
+                <form action="/murid/rekap" method="GET" class="guru-rekap-filter-form">
+
+                    <div class="guru-rekap-filter-group">
+                        <label for="week">Pilih Minggu</label>
+                        <input type="date" id="week" name="week" value="<%= awalMinggu %>" required>
+                    </div>
+
+                    <button type="submit" class="guru-rekap-filter-button">
+                        Terapkan Filter
+                    </button>
+
+                </form>
+
+                <div class="guru-rekap-period">
+
+                    <div class="guru-rekap-period-info">
+                        <span>PERIODE MINGGU</span>
+                        <strong><%= awalMingguTampil %> - <%= akhirMingguTampil %></strong>
+                    </div>
+
+                    <div class="guru-rekap-period-navigation">
+                        <a href="/murid/rekap?week=<%= mingguSebelumnya %>" class="guru-rekap-nav-btn" title="Minggu sebelumnya">←</a>
+                        <a href="/murid/rekap?week=<%= mingguBerikutnya %>" class="guru-rekap-nav-btn" title="Minggu berikutnya">→</a>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- RINGKASAN -->
+            <div class="section-heading guru-rekap-section-heading">
+                <div>
+                    <h2>Ringkasan Kehadiran</h2>
+                    <p>Total catatan kehadiran pada periode yang dipilih.</p>
+                </div>
+            </div>
+
+            <div class="guru-rekap-stats">
+
+                <div class="guru-rekap-stat-card">
+                    <div class="guru-rekap-stat-top">
+                        <span class="guru-rekap-stat-icon green">✓</span>
+                        <span>Hadir</span>
+                    </div>
+                    <strong><%= ringkasan.hadir %></strong>
+                    <small>Total kehadiran Anda</small>
+                </div>
+
+                <div class="guru-rekap-stat-card">
+                    <div class="guru-rekap-stat-top">
+                        <span class="guru-rekap-stat-icon yellow">◷</span>
+                        <span>Izin</span>
+                    </div>
+                    <strong><%= ringkasan.izin %></strong>
+                    <small>Total izin</small>
+                </div>
+
+                <div class="guru-rekap-stat-card">
+                    <div class="guru-rekap-stat-top">
+                        <span class="guru-rekap-stat-icon blue-light">✚</span>
+                        <span>Sakit</span>
+                    </div>
+                    <strong><%= ringkasan.sakit %></strong>
+                    <small>Total sakit</small>
+                </div>
+
+                <div class="guru-rekap-stat-card">
+                    <div class="guru-rekap-stat-top">
+                        <span class="guru-rekap-stat-icon red">!</span>
+                        <span>Alpa</span>
+                    </div>
+                    <strong><%= ringkasan.alpa %></strong>
+                    <small>Total tanpa keterangan</small>
+                </div>
+
+            </div>
+
+            <!-- PERSENTASE -->
+            <div class="guru-rekap-percentage-card">
+
+                <div class="guru-rekap-percentage-info">
+                    <div>
+                        <span>TINGKAT KEHADIRAN</span>
+                        <h3>Persentase Kehadiran Saya</h3>
+                        <p>Berdasarkan seluruh catatan absensi pada periode yang dipilih.</p>
+                    </div>
+
+                    <strong><%= ringkasan.persentase %>%</strong>
+                </div>
+
+                <div class="guru-rekap-progress">
+                    <div class="guru-rekap-progress-bar" style="width: <%= ringkasan.persentase %>%"></div>
+                </div>
+
+                <div class="guru-rekap-percentage-footer">
+                    <span><%= ringkasan.hadir %> Hadir</span>
+                    <span><%= ringkasan.total %> Total Catatan</span>
+                </div>
+
+            </div>
+
+            <!-- TABEL -->
+            <div class="section-heading guru-rekap-table-heading">
+                <div>
+                    <h2>Rincian per Mata Pelajaran</h2>
+                    <p>Rekap kehadiran Anda pada setiap mata pelajaran.</p>
+                </div>
+            </div>
+
+            <div class="table-container guru-rekap-table-container">
+
+                <table class="guru-table guru-rekap-table">
+
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>Mata Pelajaran</th>
+                            <th>Hadir</th>
+                            <th>Izin</th>
+                            <th>Sakit</th>
+                            <th>Alpa</th>
+                            <th>Total</th>
+                            <th>Persentase</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <% if (rekap.length === 0) { %>
+
+                            <tr>
+                                <td colspan="8" class="empty-table">
+                                    Belum ada catatan kehadiran pada minggu ini.
+                                </td>
+                            </tr>
+
+                        <% } else { %>
+
+                            <% rekap.forEach((item, index) => { %>
+
+                                <tr>
+                                    <td><%= index + 1 %></td>
+                                    <td><strong><%= item.nama_mapel %></strong></td>
+                                    <td><span class="guru-rekap-number hadir"><%= item.hadir %></span></td>
+                                    <td><span class="guru-rekap-number izin"><%= item.izin %></span></td>
+                                    <td><span class="guru-rekap-number sakit"><%= item.sakit %></span></td>
+                                    <td><span class="guru-rekap-number alpa"><%= item.alpa %></span></td>
+                                    <td><strong><%= item.total %></strong></td>
+                                    <td>
+                                        <div class="guru-rekap-table-percentage">
+                                            <strong><%= item.persentase %>%</strong>
+                                            <div class="guru-rekap-mini-progress">
+                                                <div style="width: <%= item.persentase %>%"></div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                            <% }) %>
+
+                        <% } %>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <div class="guru-rekap-footer">
+                <span>© 2026 SMASVP</span>
+                <span>Sistem Informasi Absensi Sekolah</span>
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script src="/js/guru.js"></script>
+
+</body>
+</html>

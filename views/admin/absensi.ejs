@@ -1,0 +1,344 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Absensi - SMASVP</title>
+
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="/css/kelas.css">
+    <link rel="stylesheet" href="/css/absensi.css">
+</head>
+<body>
+
+    <%- include('partials/sidebar') %>
+
+    <main class="main-content">
+
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+                <div>
+                    <h3>Data Absensi</h3>
+                    <p>Kelola dan pantau kehadiran seluruh murid SMASVP.</p>
+                </div>
+            </div>
+
+            <div class="topbar-user">
+                <div class="user-avatar">
+                    <%= user.username.charAt(0).toUpperCase() %>
+                </div>
+                <div class="user-info">
+                    <strong><%= user.username %></strong>
+                    <span>Administrator</span>
+                </div>
+            </div>
+        </header>
+
+        <section class="absensi-content">
+
+            <div class="absensi-heading">
+                <div>
+                    <h1>Data Absensi</h1>
+                    <p>Informasi kehadiran murid berdasarkan jadwal pelajaran.</p>
+                </div>
+            </div>
+
+            <% if (success) { %>
+                <div class="absensi-alert success"><%= success %></div>
+            <% } %>
+
+            <% if (error) { %>
+                <div class="absensi-alert error"><%= error %></div>
+            <% } %>
+
+            <!-- STATISTIK -->
+            <div class="absensi-stats">
+
+                <div class="absensi-stat-card">
+                    <div class="absensi-stat-icon blue">▤</div>
+                    <div>
+                        <span>Total Absensi</span>
+                        <h2><%= statistik.total || 0 %></h2>
+                    </div>
+                </div>
+
+                <div class="absensi-stat-card">
+                    <div class="absensi-stat-icon green">✓</div>
+                    <div>
+                        <span>Hadir</span>
+                        <h2><%= statistik.hadir || 0 %></h2>
+                    </div>
+                </div>
+
+                <div class="absensi-stat-card">
+                    <div class="absensi-stat-icon orange">◷</div>
+                    <div>
+                        <span>Izin / Sakit</span>
+                        <h2><%= Number(statistik.izin || 0) + Number(statistik.sakit || 0) %></h2>
+                    </div>
+                </div>
+
+                <div class="absensi-stat-card">
+                    <div class="absensi-stat-icon red">!</div>
+                    <div>
+                        <span>Alpa</span>
+                        <h2><%= statistik.alpa || 0 %></h2>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- FILTER -->
+            <section class="absensi-panel">
+
+                <div class="absensi-panel-heading">
+                    <div>
+                        <h2>Filter Absensi</h2>
+                        <p>Sesuaikan data berdasarkan kriteria berikut.</p>
+                    </div>
+                </div>
+
+                <form action="/admin/absensi" method="GET" class="absensi-filter">
+
+                    <div class="absensi-field">
+                        <label>Tanggal</label>
+                        <input type="date" name="tanggal" value="<%= filters.tanggal %>">
+                    </div>
+
+                    <div class="absensi-field">
+                        <label>Kelas</label>
+                        <select name="kelas_id">
+                            <option value="">Semua Kelas</option>
+                            <% kelas.forEach(k => { %>
+                                <option value="<%= k.id %>"
+                                    <%= String(filters.kelas_id) === String(k.id) ? 'selected' : '' %>>
+                                    <%= k.nama_kelas %>
+                                </option>
+                            <% }) %>
+                        </select>
+                    </div>
+
+                    <div class="absensi-field">
+                        <label>Guru</label>
+                        <select name="guru_id">
+                            <option value="">Semua Guru</option>
+                            <% guru.forEach(g => { %>
+                                <option value="<%= g.id %>"
+                                    <%= String(filters.guru_id) === String(g.id) ? 'selected' : '' %>>
+                                    <%= g.nama_guru %>
+                                </option>
+                            <% }) %>
+                        </select>
+                    </div>
+
+                    <div class="absensi-field">
+                        <label>Status</label>
+                        <select name="status">
+                            <option value="">Semua Status</option>
+                            <% ['Hadir', 'Izin', 'Sakit', 'Alpa'].forEach(s => { %>
+                                <option value="<%= s %>"
+                                    <%= filters.status === s ? 'selected' : '' %>>
+                                    <%= s %>
+                                </option>
+                            <% }) %>
+                        </select>
+                    </div>
+
+                    <div class="absensi-filter-actions">
+                        <button type="submit" class="btn-filter">Terapkan Filter</button>
+                        <a href="/admin/absensi" class="btn-reset-filter">Reset</a>
+                    </div>
+
+                </form>
+            </section>
+
+            <!-- TABEL -->
+            <section class="absensi-panel">
+
+                <div class="absensi-panel-heading table-heading">
+                    <div>
+                        <h2>Daftar Kehadiran Murid</h2>
+                        <p>Menampilkan <%= absensi.length %> dari <%= totalData %> data absensi.</p>
+                    </div>
+                </div>
+
+                <div class="absensi-table-wrapper">
+                    <table class="absensi-table">
+                        <thead>
+                            <tr>
+                                <th>No.</th>
+                                <th>Nama Murid</th>
+                                <th>Kelas</th>
+                                <th>Mata Pelajaran</th>
+                                <th>Guru</th>
+                                <th>Tanggal</th>
+                                <th>Jam</th>
+                                <th>Status</th>
+                                <th>Keterangan</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <% if (absensi.length === 0) { %>
+                                <tr>
+                                    <td colspan="10" class="absensi-empty">
+                                        Belum ada data absensi yang ditemukan.
+                                    </td>
+                                </tr>
+                            <% } %>
+
+                            <% absensi.forEach((a, index) => { %>
+                                <tr>
+                                    <td><%= (currentPage - 1) * 10 + index + 1 %></td>
+
+                                    <td><strong><%= a.nama_murid %></strong></td>
+
+                                    <td>
+                                        <span class="kelas-label"><%= a.nama_kelas %></span>
+                                    </td>
+
+                                    <td><%= a.nama_mapel %></td>
+
+                                    <td><%= a.nama_guru %></td>
+
+                                    <td>
+                                        <%= new Date(a.tanggal).toLocaleDateString('id-ID', {
+                                            day: '2-digit',
+                                            month: 'short',
+                                            year: 'numeric',
+                                            timeZone: 'UTC'
+                                        }) %>
+                                    </td>
+
+                                    <td>
+                                        <%= String(a.jam_mulai).slice(0,5) %> -
+                                        <%= String(a.jam_selesai).slice(0,5) %>
+                                    </td>
+
+                                    <td>
+                                        <span class="absensi-badge <%= a.status.toLowerCase() %>">
+                                            <%= a.status %>
+                                        </span>
+                                    </td>
+
+                                    <td class="keterangan-cell">
+                                        <%= a.keterangan || '-' %>
+                                    </td>
+
+                                    <td>
+                                        <div class="absensi-actions">
+                                            <button
+                                                type="button"
+                                                class="btn-edit-absensi"
+                                                data-id="<%= a.id %>"
+                                                data-nama="<%= a.nama_murid %>"
+                                                data-status="<%= a.status %>"
+                                                data-keterangan="<%= a.keterangan || '' %>"
+                                                onclick="editAbsensi(this)">
+                                                Edit
+                                            </button>
+
+                                            <form action="/admin/absensi/hapus/<%= a.id %>"
+                                                method="POST"
+                                                onsubmit="return confirm('Yakin ingin menghapus data absensi ini?')">
+
+                                                <button type="submit" class="btn-hapus-absensi">
+                                                    Hapus
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- PAGINATION -->
+                <% if (totalPages > 1) { %>
+                    <div class="absensi-pagination">
+
+                        <span>Halaman <%= currentPage %> dari <%= totalPages %></span>
+
+                        <div>
+                            <% if (currentPage > 1) { %>
+                                <a href="/admin/absensi?<%= new URLSearchParams({...filters, page: currentPage - 1}) %>">
+                                    Sebelumnya
+                                </a>
+                            <% } %>
+
+                            <% if (currentPage < totalPages) { %>
+                                <a href="/admin/absensi?<%= new URLSearchParams({...filters, page: currentPage + 1}) %>">
+                                    Selanjutnya
+                                </a>
+                            <% } %>
+                        </div>
+
+                    </div>
+                <% } %>
+
+            </section>
+
+        </section>
+
+    </main>
+
+
+    <!-- MODAL EDIT ABSENSI -->
+    <div class="modal-absensi" id="modalEditAbsensi">
+        <div class="modal-absensi-content">
+
+            <div class="modal-absensi-header">
+                <div>
+                    <h2>Edit Absensi</h2>
+                    <p id="namaEditAbsensi">Nama murid</p>
+                </div>
+
+                <button type="button" onclick="tutupEditAbsensi()">×</button>
+            </div>
+
+            <form id="formEditAbsensi" method="POST">
+
+                <div class="absensi-field">
+                    <label>Status Kehadiran</label>
+                    <select name="status" id="editStatusAbsensi" required>
+                        <option value="Hadir">Hadir</option>
+                        <option value="Izin">Izin</option>
+                        <option value="Sakit">Sakit</option>
+                        <option value="Alpa">Alpa</option>
+                    </select>
+                </div>
+
+                <div class="absensi-field">
+                    <label>Keterangan</label>
+                    <textarea
+                        name="keterangan"
+                        id="editKeteranganAbsensi"
+                        maxlength="255"
+                        rows="4"
+                        placeholder="Masukkan keterangan jika diperlukan..."></textarea>
+                </div>
+
+                <div class="modal-absensi-actions">
+                    <button type="button" onclick="tutupEditAbsensi()" class="btn-batal-absensi">
+                        Batal
+                    </button>
+
+                    <button type="submit" class="btn-simpan-absensi">
+                        Simpan Perubahan
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+    <script src="/js/admin.js"></script>
+    <script src="/js/absensi.js"></script>
+
+</body>
+</html>

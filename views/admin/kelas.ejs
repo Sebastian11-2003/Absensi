@@ -1,0 +1,168 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Kelas - SMASVP</title>
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="/css/kelas.css">
+</head>
+<body>
+
+    <%- include('partials/sidebar') %>
+
+    <main class="main-content">
+        <%- include('partials/header') %>
+
+        <section class="kelas-page">
+            <div class="page-heading">
+                <div>
+                    <h1>Data Kelas</h1>
+                    <p>Kelola tingkat dan jurusan kelas SMASVP.</p>
+                </div>
+
+                <button class="btn-primary" onclick="openModal('modalTambah')">
+                    + Tambah Kelas
+                </button>
+            </div>
+
+            <div class="kelas-summary">
+                <div class="summary-card">
+                    <span>Total Kelas</span>
+                    <h2><%= kelas.length %></h2>
+                </div>
+                <div class="summary-card">
+                    <span>Kelas IPA</span>
+                    <h2><%= kelas.filter(k => k.jurusan === 'IPA').length %></h2>
+                </div>
+                <div class="summary-card">
+                    <span>Kelas IPS</span>
+                    <h2><%= kelas.filter(k => k.jurusan === 'IPS').length %></h2>
+                </div>
+            </div>
+
+            <div class="table-card">
+                <div class="table-heading">
+                    <h3>Daftar Kelas</h3>
+                    <span><%= kelas.length %> kelas terdaftar</span>
+                </div>
+
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Nama Kelas</th>
+                                <th>Tingkat</th>
+                                <th>Jurusan</th>
+                                <th>Jumlah Murid</th>
+                                <th>Jumlah Jadwal</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (kelas.length === 0) { %>
+                                <tr>
+                                    <td colspan="7" class="empty-data">Belum ada data kelas.</td>
+                                </tr>
+                            <% } %>
+
+                            <% kelas.forEach((k, index) => { %>
+                                <tr>
+                                    <td><%= index + 1 %></td>
+                                    <td><strong><%= k.nama_kelas %></strong></td>
+                                    <td><%= k.tingkat %></td>
+                                    <td>
+                                        <span class="jurusan <%= k.jurusan.toLowerCase() %>">
+                                            <%= k.jurusan %>
+                                        </span>
+                                    </td>
+                                    <td><%= k.total_murid %> murid</td>
+                                    <td><%= k.total_jadwal %> jadwal</td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="btn-edit"
+                                                onclick='editKelas(<%- JSON.stringify({
+                                                    id: k.id,
+                                                    tingkat: k.tingkat,
+                                                    jurusan: k.jurusan
+                                                }) %>)'>
+                                                Edit
+                                            </button>
+
+                                            <form action="/admin/kelas/hapus/<%= k.id %>" method="POST"
+                                                onsubmit="return confirm('Yakin ingin menghapus kelas <%= k.nama_kelas %>?')">
+                                                <button class="btn-delete" type="submit">Hapus</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- MODAL TAMBAH -->
+    <div class="modal" id="modalTambah">
+        <div class="modal-content">
+            <div class="modal-heading">
+                <h2>Tambah Kelas</h2>
+                <button type="button" onclick="closeModal('modalTambah')">&times;</button>
+            </div>
+
+            <form action="/admin/kelas/tambah" method="POST">
+                <label>Tingkat</label>
+                <select name="tingkat" required>
+                    <option value="">Pilih tingkat</option>
+                    <option value="X">Kelas X</option>
+                    <option value="XI">Kelas XI</option>
+                    <option value="XII">Kelas XII</option>
+                </select>
+
+                <label>Jurusan</label>
+                <select name="jurusan" required>
+                    <option value="">Pilih jurusan</option>
+                    <option value="IPA">IPA</option>
+                    <option value="IPS">IPS</option>
+                </select>
+
+                <button type="submit" class="btn-primary full-button">Simpan Kelas</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL EDIT -->
+    <div class="modal" id="modalEdit">
+        <div class="modal-content">
+            <div class="modal-heading">
+                <h2>Edit Kelas</h2>
+                <button type="button" onclick="closeModal('modalEdit')">&times;</button>
+            </div>
+
+            <form id="formEdit" method="POST">
+                <label>Tingkat</label>
+                <select name="tingkat" id="editTingkat" required>
+                    <option value="X">Kelas X</option>
+                    <option value="XI">Kelas XI</option>
+                    <option value="XII">Kelas XII</option>
+                </select>
+
+                <label>Jurusan</label>
+                <select name="jurusan" id="editJurusan" required>
+                    <option value="IPA">IPA</option>
+                    <option value="IPS">IPS</option>
+                </select>
+
+                <button type="submit" class="btn-primary full-button">Simpan Perubahan</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="/js/admin.js"></script>
+    <script src="/js/kelas.js"></script>
+</body>
+</html>

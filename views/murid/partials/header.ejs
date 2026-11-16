@@ -1,0 +1,27 @@
+<header class="topbar">
+
+    <div class="topbar-left">
+        <button class="sidebar-toggle" id="sidebarToggle">
+            ☰
+        </button>
+
+        <div>
+            <h3><%= pageTitle %></h3>
+            <p><%= pageSubtitle %></p>
+        </div>
+    </div>
+
+    <div class="topbar-user">
+
+        <div class="user-avatar">
+            <%= murid.nama_murid.charAt(0).toUpperCase() %>
+        </div>
+
+        <div class="user-info">
+            <strong><%= murid.nama_murid %></strong>
+            <span>Murid · <%= murid.nama_kelas %></span>
+        </div>
+
+    </div>
+
+</header>

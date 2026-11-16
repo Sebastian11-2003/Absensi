@@ -1,0 +1,244 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelola Akun - SMASVP</title>
+
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="/css/kelas.css">
+    <link rel="stylesheet" href="/css/akun.css">
+</head>
+<body>
+
+    <%- include('partials/sidebar') %>
+
+    <main class="main-content">
+
+        <div class="akun-header">
+            <div>
+                <h1>Kelola Akun</h1>
+                <p>Kelola akun login Guru dan Murid SMASVP.</p>
+            </div>
+
+            <button class="btn-tambah-akun" onclick="bukaModalTambah()">
+                + Tambah Akun
+            </button>
+        </div>
+
+        <% if (success) { %>
+            <div class="alert-akun success"><%= success %></div>
+        <% } %>
+
+        <% if (error) { %>
+            <div class="alert-akun error"><%= error %></div>
+        <% } %>
+
+        <section class="akun-container">
+
+            <div class="akun-summary">
+                <div class="summary-card">
+                    <span>Total Akun</span>
+                    <strong><%= akun.length %></strong>
+                </div>
+
+                <div class="summary-card">
+                    <span>Akun Guru</span>
+                    <strong><%= akun.filter(a => a.role === 'guru').length %></strong>
+                </div>
+
+                <div class="summary-card">
+                    <span>Akun Murid</span>
+                    <strong><%= akun.filter(a => a.role === 'murid').length %></strong>
+                </div>
+
+                <div class="summary-card">
+                    <span>Akun Nonaktif</span>
+                    <strong><%= akun.filter(a => a.status === 'nonaktif').length %></strong>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="akun-table">
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>Nama Pemilik</th>
+                            <th>Username</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th>Dibuat</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <% if (akun.length === 0) { %>
+                            <tr>
+                                <td colspan="7" class="empty-akun">Belum ada akun.</td>
+                            </tr>
+                        <% } %>
+
+                        <% akun.forEach((a, index) => { %>
+                            <tr>
+                                <td><%= index + 1 %></td>
+                                <td><strong><%= a.nama %></strong></td>
+                                <td><%= a.username %></td>
+                                <td>
+                                    <span class="role-badge <%= a.role %>">
+                                        <%= a.role.toUpperCase() %>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="status-badge <%= a.status %>">
+                                        <%= a.status.toUpperCase() %>
+                                    </span>
+                                </td>
+                                <td>
+                                    <%= a.created_at ? new Date(a.created_at).toLocaleDateString('id-ID') : '-' %>
+                                </td>
+                                <td>
+                                    <% if (a.role !== 'admin') { %>
+                                        <div class="aksi-akun">
+
+                                            <button
+                                                type="button"
+                                                class="btn-edit-akun"
+                                                data-id="<%= a.id %>"
+                                                data-username="<%= a.username %>"
+                                                onclick="editAkun(this)">
+                                                Edit
+                                            </button>
+
+                                            <form action="/admin/akun/status/<%= a.id %>" method="POST">
+                                                <button type="submit"
+                                                    class="btn-status-akun <%= a.status === 'aktif' ? 'nonaktifkan' : 'aktifkan' %>">
+                                                    <%= a.status === 'aktif' ? 'Nonaktifkan' : 'Aktifkan' %>
+                                                </button>
+                                            </form>
+
+                                            <form action="/admin/akun/hapus/<%= a.id %>" method="POST"
+                                                onsubmit="return confirm('Yakin ingin menghapus akun ini? Profil Guru/Murid tetap disimpan.')">
+                                                <button type="submit" class="btn-hapus-akun">Hapus</button>
+                                            </form>
+
+                                        </div>
+                                    <% } else { %>
+                                        <span class="admin-protected">Dilindungi</span>
+                                    <% } %>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </div>
+
+        </section>
+    </main>
+
+
+    <!-- MODAL TAMBAH AKUN -->
+    <div class="modal-akun" id="modalTambahAkun">
+        <div class="modal-akun-content">
+
+            <div class="modal-akun-header">
+                <h2>Tambah Akun</h2>
+                <button type="button" onclick="tutupModalTambah()">×</button>
+            </div>
+
+            <form action="/admin/akun/tambah" method="POST">
+
+                <div class="form-akun-group">
+                    <label>Jenis Akun</label>
+                    <select name="role" id="roleAkun" required>
+                        <option value="">Pilih Jenis Akun</option>
+                        <option value="guru">Guru</option>
+                        <option value="murid">Murid</option>
+                    </select>
+                </div>
+
+                <div class="form-akun-group" id="pilihGuru" style="display:none;">
+                    <label>Pilih Guru</label>
+                    <select name="profil_id" id="guruProfil">
+                        <option value="">Pilih Guru</option>
+                        <% guru.forEach(g => { %>
+                            <option value="<%= g.id %>"><%= g.nama_guru %></option>
+                        <% }) %>
+                    </select>
+                </div>
+
+                <div class="form-akun-group" id="pilihMurid" style="display:none;">
+                    <label>Pilih Murid</label>
+                    <select name="profil_id" id="muridProfil" disabled>
+                        <option value="">Pilih Murid</option>
+                        <% murid.forEach(m => { %>
+                            <option value="<%= m.id %>"><%= m.nama_murid %></option>
+                        <% }) %>
+                    </select>
+                </div>
+
+                <div class="form-akun-group">
+                    <label>Username</label>
+                    <input type="text" name="username" required
+                        placeholder="Masukkan username" autocomplete="off">
+                </div>
+
+                <div class="form-akun-group">
+                    <label>Password</label>
+                    <input type="password" name="password" required
+                        minlength="6" maxlength="6"
+                        pattern="[A-Za-z0-9]{6}"
+                        placeholder="6 karakter huruf/angka"
+                        autocomplete="new-password">
+                    <small>Password Guru dan Murid harus tepat 6 karakter alfanumerik.</small>
+                </div>
+
+                <div class="modal-akun-actions">
+                    <button type="button" class="btn-batal-akun" onclick="tutupModalTambah()">Batal</button>
+                    <button type="submit" class="btn-simpan-akun">Buat Akun</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+
+    <!-- MODAL EDIT AKUN -->
+    <div class="modal-akun" id="modalEditAkun">
+        <div class="modal-akun-content">
+
+            <div class="modal-akun-header">
+                <h2>Edit Akun</h2>
+                <button type="button" onclick="tutupModalEdit()">×</button>
+            </div>
+
+            <form id="formEditAkun" method="POST">
+
+                <div class="form-akun-group">
+                    <label>Username</label>
+                    <input type="text" name="username" id="editUsername" required>
+                </div>
+
+                <div class="form-akun-group">
+                    <label>Password Baru</label>
+                    <input type="password" name="password"
+                        minlength="6" maxlength="6"
+                        pattern="[A-Za-z0-9]{6}"
+                        placeholder="Kosongkan jika tidak ingin mengubah password"
+                        autocomplete="new-password">
+                    <small>Password baru harus tepat 6 karakter alfanumerik.</small>
+                </div>
+
+                <div class="modal-akun-actions">
+                    <button type="button" class="btn-batal-akun" onclick="tutupModalEdit()">Batal</button>
+                    <button type="submit" class="btn-simpan-akun">Simpan Perubahan</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <script src="/js/akun.js"></script>
+</body>
+</html>

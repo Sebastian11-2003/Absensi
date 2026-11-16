@@ -1,0 +1,318 @@
+
+.akun-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.akun-header h1 {
+    margin: 0 0 7px;
+    font-size: 25px;
+    color: #1e293b;
+}
+
+.akun-header p {
+    margin: 0;
+    color: #64748b;
+    font-size: 14px;
+}
+
+.btn-tambah-akun,
+.btn-simpan-akun {
+    border: none;
+    background: #2563eb;
+    color: white;
+    padding: 11px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.btn-tambah-akun:hover,
+.btn-simpan-akun:hover {
+    background: #1d4ed8;
+}
+
+.akun-container {
+    background: white;
+    padding: 22px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+}
+
+.akun-summary {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.summary-card {
+    padding: 18px;
+    border: 1px solid #e5eaf1;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+.summary-card span {
+    color: #64748b;
+    font-size: 13px;
+}
+
+.summary-card strong {
+    font-size: 25px;
+    color: #1e293b;
+}
+
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.akun-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 900px;
+}
+
+.akun-table th {
+    background: #f1f5f9;
+    color: #475569;
+    font-size: 13px;
+    padding: 14px 12px;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.akun-table td {
+    padding: 14px 12px;
+    border-bottom: 1px solid #edf0f4;
+    color: #334155;
+    font-size: 13px;
+}
+
+.akun-table tbody tr:hover {
+    background: #f8fafc;
+}
+
+.role-badge,
+.status-badge {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.role-badge.admin {
+    background: #ede9fe;
+    color: #6d28d9;
+}
+
+.role-badge.guru {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.role-badge.murid {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.status-badge.aktif {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.status-badge.nonaktif {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.aksi-akun {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.aksi-akun form {
+    margin: 0;
+}
+
+.btn-edit-akun,
+.btn-status-akun,
+.btn-hapus-akun {
+    border: none;
+    padding: 7px 9px;
+    border-radius: 6px;
+    font-size: 11px;
+    cursor: pointer;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.btn-edit-akun {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.btn-status-akun.nonaktifkan {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.btn-status-akun.aktifkan {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.btn-hapus-akun {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.admin-protected {
+    color: #94a3b8;
+    font-size: 12px;
+}
+
+.empty-akun {
+    text-align: center;
+    padding: 25px !important;
+    color: #94a3b8 !important;
+}
+
+.modal-akun {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(15, 23, 42, .55);
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+}
+
+.modal-akun.active {
+    display: flex;
+}
+
+.modal-akun-content {
+    background: white;
+    width: 100%;
+    max-width: 480px;
+    max-height: 90vh;
+    overflow-y: auto;
+    border-radius: 12px;
+    padding: 24px;
+}
+
+.modal-akun-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 22px;
+}
+
+.modal-akun-header h2 {
+    margin: 0;
+    font-size: 20px;
+    color: #1e293b;
+}
+
+.modal-akun-header button {
+    border: none;
+    background: transparent;
+    font-size: 27px;
+    color: #64748b;
+    cursor: pointer;
+}
+
+.form-akun-group {
+    margin-bottom: 17px;
+}
+
+.form-akun-group label {
+    display: block;
+    margin-bottom: 7px;
+    color: #334155;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.form-akun-group input,
+.form-akun-group select {
+    width: 100%;
+    padding: 11px 12px;
+    border: 1px solid #dbe2ea;
+    border-radius: 7px;
+    outline: none;
+    font-size: 14px;
+    background: white;
+}
+
+.form-akun-group input:focus,
+.form-akun-group select:focus {
+    border-color: #3b82f6;
+}
+
+.form-akun-group small {
+    display: block;
+    margin-top: 7px;
+    color: #94a3b8;
+    font-size: 11px;
+}
+
+.modal-akun-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 22px;
+}
+
+.btn-batal-akun {
+    border: 1px solid #cbd5e1;
+    background: white;
+    color: #475569;
+    padding: 10px 17px;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+.alert-akun {
+    padding: 12px 16px;
+    margin-bottom: 18px;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.alert-akun.success {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.alert-akun.error {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+@media (max-width: 800px) {
+    .akun-summary {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .akun-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .akun-summary {
+        grid-template-columns: 1fr 1fr;
+    }
+}

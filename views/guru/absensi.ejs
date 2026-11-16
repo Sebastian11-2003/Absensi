@@ -1,0 +1,154 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Absensi Murid - SMASVP</title>
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="/css/guru.css">
+</head>
+<body>
+
+<div class="admin-layout">
+
+    <%- include('partials/sidebar', { activePage: 'absensi' }) %>
+
+    <main class="main-content">
+
+        <%- include('partials/header', {
+            guru,
+            pageTitle: 'Absensi Murid',
+            pageSubtitle: 'Pencatatan kehadiran peserta didik'
+        }) %>
+
+        <section class="dashboard-content">
+
+            <div class="page-intro">
+                <span class="welcome-label">KEHADIRAN MURID</span>
+                <h1>Absensi Murid</h1>
+                <p>Pilih jadwal pelajaran yang sedang berlangsung untuk mencatat kehadiran murid.</p>
+            </div>
+
+            <% if (typeof query !== 'undefined' && query.success) { %>
+                <div class="alert-success">
+                    <span>✓</span>
+                    Absensi berhasil disimpan. Data kehadiran telah tercatat.
+                </div>
+            <% } %>
+
+            <div class="attendance-date-card">
+                <div>
+                    <span>HARI INI</span>
+                    <strong><%= hariIni %></strong>
+                </div>
+                <div>
+                    <span>TANGGAL</span>
+                    <strong><%= tanggalHariIni %></strong>
+                </div>
+            </div>
+
+            <div class="section-heading schedule-heading">
+                <div>
+                    <h2>Jadwal Mengajar Hari Ini</h2>
+                    <p>Absensi hanya tersedia selama jam pelajaran berlangsung.</p>
+                </div>
+            </div>
+
+            <div class="attendance-schedule-list">
+
+                <% if (daftarJadwal.length === 0) { %>
+
+                    <div class="empty-state">
+                        <div class="empty-icon">◷</div>
+                        <h3>Tidak Ada Jadwal Hari Ini</h3>
+                        <p>Anda tidak memiliki jadwal mengajar pada hari ini.</p>
+                    </div>
+
+                <% } else { %>
+
+                    <% daftarJadwal.forEach(item => { %>
+
+                        <div class="attendance-schedule-card">
+
+                            <div class="attendance-schedule-icon">▤</div>
+
+                            <div class="attendance-schedule-info">
+                                <h3><%= item.nama_mapel %></h3>
+
+                                <p>
+                                    <%= item.nama_kelas %> ·
+                                    Kelas <%= item.tingkat %> <%= item.jurusan %>
+                                </p>
+
+                                <div class="attendance-schedule-meta">
+                                    <span>◷ <%= item.jamMulai %> - <%= item.jamSelesai %></span>
+                                    <span>♧ <%= item.total_murid %> Murid</span>
+                                </div>
+                            </div>
+
+                            <div class="attendance-schedule-action">
+
+                                <% if (item.sudahDiabsen) { %>
+
+                                    <span class="attendance-status-badge completed">
+                                        ✓ Sudah Diabsen
+                                    </span>
+
+                                <% } else if (item.sedangBerlangsung) { %>
+
+                                    <span class="attendance-status-badge ongoing">
+                                        Sedang Berlangsung
+                                    </span>
+
+                                    <a href="/guru/absensi/<%= item.id %>" class="btn-attendance">
+                                        Mulai Absensi →
+                                    </a>
+
+                                <% } else { %>
+
+                                    <span class="attendance-status-badge waiting">
+                                        Belum / Sudah Selesai
+                                    </span>
+
+                                    <button class="btn-attendance disabled" disabled>
+                                        Absensi Ditutup
+                                    </button>
+
+                                <% } %>
+
+                            </div>
+
+                        </div>
+
+                    <% }) %>
+
+                <% } %>
+
+            </div>
+
+            <div class="dashboard-footer">
+                <span>© 2026 SMASVP</span>
+                <span>Sistem Informasi Absensi Sekolah</span>
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script>
+    // Pesan sukses dari redirect setelah penyimpanan
+    const params = new URLSearchParams(window.location.search);
+    const success = params.get('success');
+
+    if (success === '1') {
+        window.history.replaceState({}, document.title, window.location.pathname);
+    }
+</script>
+
+<script src="/js/guru.js"></script>
+
+</body>
+</html>

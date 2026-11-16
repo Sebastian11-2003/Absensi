@@ -1,0 +1,174 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Riwayat Absensi | SMASVP</title>
+
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="/css/guru.css">
+</head>
+<body>
+
+<div class="admin-layout">
+
+    <%- include('partials/sidebar', { activePage: 'riwayat-absensi' }) %>
+
+    <main class="main-content">
+
+        <%- include('partials/header', {
+            guru,
+            pageTitle: 'Detail Riwayat Absensi',
+            pageSubtitle: 'Informasi kehadiran murid pada jadwal yang dipilih'
+        }) %>
+
+        <div class="dashboard-content">
+
+            <a href="/guru/riwayat-absensi" class="guru-history-back-link">
+                <i class="fa-solid fa-arrow-left"></i>
+                Kembali ke Riwayat Absensi
+            </a>
+
+            <div class="guru-history-detail-heading">
+                <div>
+                    <span class="guru-history-label">MATA PELAJARAN</span>
+                    <h2><%= riwayat.nama_mapel %></h2>
+                    <p>
+                        <%= riwayat.nama_kelas %>
+                        (<%= riwayat.tingkat %> <%= riwayat.jurusan %>)
+                    </p>
+                </div>
+
+                <div class="guru-history-date">
+                    <i class="fa-regular fa-calendar"></i>
+                    <div>
+                        <strong><%= riwayat.hari %></strong>
+                        <span><%= riwayat.tanggalTampil %></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="guru-history-detail-info">
+                <div>
+                    <span>Jam Pelajaran</span>
+                    <strong>
+                        <%= riwayat.jamMulai %> - <%= riwayat.jamSelesai %>
+                    </strong>
+                </div>
+
+                <div>
+                    <span>Total Murid</span>
+                    <strong><%= riwayat.total_murid %> Murid</strong>
+                </div>
+            </div>
+
+            <div class="guru-history-summary-grid">
+
+                <div class="guru-history-summary-box hadir">
+                    <span>Hadir</span>
+                    <strong><%= riwayat.hadir %></strong>
+                </div>
+
+                <div class="guru-history-summary-box izin">
+                    <span>Izin</span>
+                    <strong><%= riwayat.izin %></strong>
+                </div>
+
+                <div class="guru-history-summary-box sakit">
+                    <span>Sakit</span>
+                    <strong><%= riwayat.sakit %></strong>
+                </div>
+
+                <div class="guru-history-summary-box alpa">
+                    <span>Alpa</span>
+                    <strong><%= riwayat.alpa %></strong>
+                </div>
+
+            </div>
+
+            <div class="guru-history-container">
+
+                <div class="guru-history-container-header">
+                    <div>
+                        <h3>Daftar Kehadiran Murid</h3>
+                        <p>Rincian status kehadiran setiap murid</p>
+                    </div>
+                </div>
+
+                <% if (murid.length === 0) { %>
+
+                    <div class="guru-history-empty">
+                        <h3>Data Murid Tidak Ditemukan</h3>
+                    </div>
+
+                <% } else { %>
+
+                    <div class="guru-history-table-wrapper">
+                        <table class="guru-history-table">
+                            <thead>
+                                <tr>
+                                    <th>No.</th>
+                                    <th>Nama Murid</th>
+                                    <th>Jenis Kelamin</th>
+                                    <th>Status Kehadiran</th>
+                                    <th>Keterangan</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <% murid.forEach((item, index) => { %>
+
+                                    <tr>
+                                        <td><%= index + 1 %></td>
+
+                                        <td>
+                                            <strong><%= item.nama_murid %></strong>
+                                        </td>
+
+                                        <td>
+                                            <%= item.jenis_kelamin === 'L'
+                                                ? 'Laki-laki'
+                                                : item.jenis_kelamin === 'P'
+                                                    ? 'Perempuan'
+                                                    : '-' %>
+                                        </td>
+
+                                        <td>
+                                            <span class="guru-status-badge <%= item.status.toLowerCase() %>">
+                                                <%= item.status %>
+                                            </span>
+                                        </td>
+
+                                        <td>
+                                            <%= item.keterangan || '-' %>
+                                        </td>
+                                    </tr>
+
+                                <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+
+                <% } %>
+
+            </div>
+
+            <div class="guru-history-readonly-note">
+                <i class="fa-solid fa-lock"></i>
+                <span>
+                    Halaman ini hanya menampilkan riwayat absensi.
+                    Perubahan data absensi hanya dapat dilakukan oleh Admin.
+                </span>
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+<script src="/js/guru.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,28 @@
+
+<header class="topbar">
+
+    <div class="topbar-left">
+        <button class="sidebar-toggle" id="sidebarToggle">
+            ☰
+        </button>
+
+        <div>
+            <h3><%= pageTitle %></h3>
+            <p><%= pageSubtitle %></p>
+        </div>
+    </div>
+
+    <div class="topbar-user">
+
+        <div class="user-avatar">
+            <%= guru.nama_guru.charAt(0).toUpperCase() %>
+        </div>
+
+        <div class="user-info">
+            <strong><%= guru.nama_guru %></strong>
+            <span>Guru</span>
+        </div>
+
+    </div>
+
+</header>

@@ -1,0 +1,183 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pengisian Absensi - SMASVP</title>
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="/css/guru.css">
+</head>
+<body>
+
+<div class="admin-layout">
+
+    <%- include('partials/sidebar', { activePage: 'absensi' }) %>
+
+    <main class="main-content">
+
+        <%- include('partials/header', {
+            guru,
+            pageTitle: 'Pengisian Absensi',
+            pageSubtitle: 'Pencatatan kehadiran murid'
+        }) %>
+
+        <section class="dashboard-content">
+
+            <a href="/guru/absensi" class="back-link">← Kembali ke Daftar Jadwal</a>
+
+            <div class="page-intro attendance-detail-intro">
+                <span class="welcome-label">FORMULIR KEHADIRAN</span>
+                <h1><%= jadwal.nama_mapel %></h1>
+                <p>
+                    <%= jadwal.nama_kelas %> ·
+                    Kelas <%= jadwal.tingkat %> <%= jadwal.jurusan %>
+                </p>
+                <div class="detail-meta">
+                    <span><%= jadwal.hari %></span>
+                    <span><%= String(jadwal.jam_mulai).slice(0, 5) %> - <%= String(jadwal.jam_selesai).slice(0, 5) %></span>
+                    <span><%= tanggalHariIni %></span>
+                </div>
+            </div>
+
+            <% if (sudahDisimpan) { %>
+
+                <div class="alert-success locked-message">
+                    <span>✓</span>
+                    Absensi untuk jadwal ini sudah disimpan. Data hanya dapat dikoreksi oleh Administrator.
+                </div>
+
+            <% } else { %>
+
+                <div class="attendance-instruction">
+                    <strong>Petunjuk Pengisian</strong>
+                    <p>Pilih status kehadiran setiap murid. Status awal adalah Hadir dan dapat diubah sesuai kondisi sebenarnya.</p>
+                </div>
+
+            <% } %>
+
+            <div class="attendance-table-card">
+
+                <div class="attendance-table-heading">
+                    <div>
+                        <h2>Daftar Murid</h2>
+                        <p>Total <%= murid.length %> murid terdaftar</p>
+                    </div>
+
+                    <span class="student-total"><%= murid.length %> Murid</span>
+                </div>
+
+                <% if (murid.length === 0) { %>
+
+                    <div class="empty-state">
+                        <div class="empty-icon">♧</div>
+                        <h3>Belum Ada Murid</h3>
+                        <p>Belum ada murid yang terdaftar pada kelas ini.</p>
+                    </div>
+
+                <% } else { %>
+
+                    <form action="/guru/absensi/<%= jadwal.id %>/simpan" method="POST" id="attendanceForm">
+
+                        <div class="attendance-table-wrap">
+
+                            <table class="guru-table attendance-table">
+                                <thead>
+                                    <tr>
+                                        <th>No.</th>
+                                        <th>Nama Murid</th>
+                                        <th>Jenis Kelamin</th>
+                                        <th>Status Kehadiran</th>
+                                        <th>Keterangan</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+
+                                    <% murid.forEach((item, index) => { %>
+
+                                        <tr>
+                                            <td><%= index + 1 %></td>
+
+                                            <td>
+                                                <strong><%= item.nama_murid %></strong>
+                                            </td>
+
+                                            <td>
+                                                <%= item.jenis_kelamin === 'L' ? 'Laki-laki' : item.jenis_kelamin === 'P' ? 'Perempuan' : '-' %>
+                                            </td>
+
+                                            <td>
+                                                <div class="attendance-options">
+
+                                                    <% ['Hadir', 'Izin', 'Sakit', 'Alpa'].forEach(status => { %>
+
+                                                        <label class="attendance-choice <%= status.toLowerCase() %>">
+                                                            <input
+                                                                type="radio"
+                                                                name="status[<%= item.id %>]"
+                                                                value="<%= status %>"
+                                                                <%= item.status ? (item.status === status ? 'checked' : '') : (status === 'Hadir' ? 'checked' : '') %>
+                                                                <%= sudahDisimpan ? 'disabled' : 'required' %>
+                                                            >
+                                                            <span><%= status %></span>
+                                                        </label>
+
+                                                    <% }) %>
+
+                                                </div>
+                                            </td>
+
+                                            <td>
+                                                <input
+                                                    type="text"
+                                                    class="attendance-note"
+                                                    name="keterangan[<%= item.id %>]"
+                                                    maxlength="255"
+                                                    placeholder="Opsional"
+                                                    value="<%= item.keterangan || '' %>"
+                                                    <%= sudahDisimpan ? 'disabled' : '' %>
+                                                >
+                                            </td>
+                                        </tr>
+
+                                    <% }) %>
+
+                                </tbody>
+                            </table>
+
+                        </div>
+
+                        <% if (!sudahDisimpan) { %>
+
+                            <div class="attendance-form-footer">
+                                <span>Pastikan seluruh status kehadiran sudah benar sebelum menyimpan.</span>
+
+                                <button type="submit" class="btn-save-attendance" <%= murid.length === 0 ? 'disabled' : '' %>>
+                                    ✓ Simpan Absensi
+                                </button>
+                            </div>
+
+                        <% } %>
+
+                    </form>
+
+                <% } %>
+
+            </div>
+
+            <div class="dashboard-footer">
+                <span>© 2026 SMASVP</span>
+                <span>Sistem Informasi Absensi Sekolah</span>
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script src="/js/guru.js"></script>
+
+</body>
+</html>

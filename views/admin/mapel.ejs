@@ -1,0 +1,188 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mata Pelajaran - SMASVP</title>
+
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="/css/kelas.css">
+    <link rel="stylesheet" href="/css/mapel.css">
+</head>
+<body>
+
+    <%- include('partials/sidebar') %>
+
+    <main class="main-content">
+        <%- include('partials/header') %>
+
+        <section class="kelas-page">
+            <div class="page-heading">
+                <div>
+                    <h1>Mata Pelajaran</h1>
+                    <p>Kelola daftar mata pelajaran yang diajarkan di SMASVP.</p>
+                </div>
+
+                <button class="btn-primary" onclick="openModal('modalTambah')">
+                    + Tambah Mapel
+                </button>
+            </div>
+
+            <div class="kelas-summary">
+                <div class="summary-card">
+                    <span>Total Mata Pelajaran</span>
+                    <h2><%= mapel.length %></h2>
+                </div>
+
+                <div class="summary-card">
+                    <span>Sudah Dijadwalkan</span>
+                    <h2><%= mapel.filter(m => m.total_jadwal > 0).length %></h2>
+                </div>
+
+                <div class="summary-card">
+                    <span>Belum Dijadwalkan</span>
+                    <h2><%= mapel.filter(m => m.total_jadwal === 0).length %></h2>
+                </div>
+            </div>
+
+            <div class="table-card">
+                <div class="table-heading">
+                    <h3>Daftar Mata Pelajaran</h3>
+                    <span><%= mapel.length %> mata pelajaran terdaftar</span>
+                </div>
+
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Nama Mata Pelajaran</th>
+                                <th>Jumlah Jadwal</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <% if (mapel.length === 0) { %>
+                                <tr>
+                                    <td colspan="5" class="empty-data">
+                                        Belum ada data mata pelajaran.
+                                    </td>
+                                </tr>
+                            <% } %>
+
+                            <% mapel.forEach((m, index) => { %>
+                                <tr>
+                                    <td><%= index + 1 %></td>
+
+                                    <td>
+                                        <strong><%= m.nama_mapel %></strong>
+                                    </td>
+
+                                    <td><%= m.total_jadwal %> jadwal</td>
+
+                                    <td>
+                                        <% if (m.total_jadwal > 0) { %>
+                                            <span class="badge-status dipakai">
+                                                Dipakai
+                                            </span>
+                                        <% } else { %>
+                                            <span class="badge-status belum">
+                                                Belum dipakai
+                                            </span>
+                                        <% } %>
+                                    </td>
+
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button
+                                                class="btn-edit"
+                                                type="button"
+                                                data-id="<%= m.id %>"
+                                                data-nama="<%= m.nama_mapel %>"
+                                                onclick="editMapel(this)">
+                                                Edit
+                                            </button>
+
+                                            <form
+                                                action="/admin/mapel/hapus/<%= m.id %>"
+                                                method="POST"
+                                                data-nama="<%= m.nama_mapel %>"
+                                                class="form-hapus-mapel">
+
+                                                <button class="btn-delete" type="submit">
+                                                    Hapus
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- MODAL TAMBAH -->
+    <div class="modal" id="modalTambah">
+        <div class="modal-content">
+            <div class="modal-heading">
+                <h2>Tambah Mata Pelajaran</h2>
+                <button type="button" onclick="closeModal('modalTambah')">
+                    &times;
+                </button>
+            </div>
+
+            <form action="/admin/mapel/tambah" method="POST">
+                <label>Nama Mata Pelajaran</label>
+
+                <input
+                    type="text"
+                    name="nama_mapel"
+                    maxlength="100"
+                    placeholder="Contoh: Matematika"
+                    required>
+
+                <button type="submit" class="btn-primary full-button">
+                    Simpan Mapel
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL EDIT -->
+    <div class="modal" id="modalEdit">
+        <div class="modal-content">
+            <div class="modal-heading">
+                <h2>Edit Mata Pelajaran</h2>
+                <button type="button" onclick="closeModal('modalEdit')">
+                    &times;
+                </button>
+            </div>
+
+            <form id="formEdit" method="POST">
+                <label>Nama Mata Pelajaran</label>
+
+                <input
+                    type="text"
+                    name="nama_mapel"
+                    id="editNama"
+                    maxlength="100"
+                    required>
+
+                <button type="submit" class="btn-primary full-button">
+                    Simpan Perubahan
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script src="/js/admin.js"></script>
+    <script src="/js/mapel.js"></script>
+
+</body>
+</html>

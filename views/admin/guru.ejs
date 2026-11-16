@@ -1,0 +1,260 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Data Guru - SMASVP</title>
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="/css/guru.css">
+</head>
+<body>
+
+<div class="admin-layout">
+
+    <%- include('partials/sidebar') %>
+
+    <main class="main-content">
+
+        <%- include('partials/header') %>
+
+        <section class="dashboard-content">
+
+            <div class="page-heading">
+                <div>
+                    <h1>Data Guru</h1>
+                    <p>Kelola data tenaga pendidik SMASVP.</p>
+                </div>
+
+                <button class="btn-primary" onclick="openAddModal()">
+                    + Tambah Guru
+                </button>
+            </div>
+
+            <% if (createdAccount) { %>
+                <div class="credential-alert">
+                    <div>
+                        <strong>Akun Guru berhasil dibuat!</strong>
+                        <p>Simpan informasi login berikut dan berikan kepada guru.</p>
+                    </div>
+
+                    <div class="credential-data">
+                        <span>Username: <strong><%= createdAccount.username %></strong></span>
+                        <span>Password: <strong><%= createdAccount.password %></strong></span>
+                    </div>
+
+                    <button type="button" onclick="this.parentElement.remove()">
+                        ×
+                    </button>
+                </div>
+            <% } %>
+
+            <div class="guru-summary">
+                <div>
+                    <span>Total Guru</span>
+                    <strong><%= guru.length %></strong>
+                </div>
+            </div>
+
+            <div class="table-card">
+
+                <div class="table-header">
+                    <div>
+                        <h3>Daftar Guru</h3>
+                        <p>Seluruh data guru yang terdaftar di sekolah.</p>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Nama Guru</th>
+                                <th>Jenis Kelamin</th>
+                                <th>Username</th>
+                                <th>Status Akun</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <% if (guru.length === 0) { %>
+                                <tr>
+                                    <td colspan="6" class="empty-data">
+                                        Belum ada data guru.
+                                    </td>
+                                </tr>
+                            <% } %>
+
+                            <% guru.forEach((item, index) => { %>
+                                <tr>
+                                    <td><%= index + 1 %></td>
+
+                                    <td>
+                                        <strong><%= item.nama_guru %></strong>
+                                    </td>
+
+                                    <td>
+                                        <%= item.jenis_kelamin === 'L'
+                                            ? 'Laki-laki'
+                                            : 'Perempuan' %>
+                                    </td>
+
+                                    <td>
+                                        <%= item.username || '-' %>
+                                    </td>
+
+                                    <td>
+                                        <% if (item.status === 'aktif') { %>
+                                            <span class="status-badge active">Aktif</span>
+                                        <% } else if (item.status === 'nonaktif') { %>
+                                            <span class="status-badge inactive">Nonaktif</span>
+                                        <% } else { %>
+                                            <span class="status-badge inactive">Belum ada akun</span>
+                                        <% } %>
+                                    </td>
+
+                                    <td>
+                                        <div class="action-buttons">
+
+                                            <button
+                                                class="btn-edit"
+                                                onclick='openEditModal(<%- JSON.stringify(item).replace(/</g, "\\u003c") %>)'>
+                                                Edit
+                                            </button>
+
+                                            <% if (item.user_id) { %>
+                                                <form action="/admin/guru/status/<%= item.id %>" method="POST">
+                                                    <button type="submit" class="btn-status">
+                                                        <%= item.status === 'aktif' ? 'Nonaktifkan' : 'Aktifkan' %>
+                                                    </button>
+                                                </form>
+                                            <% } %>
+
+                                            <form
+                                                action="/admin/guru/hapus/<%= item.id %>"
+                                                method="POST"
+                                                onsubmit="return confirm('Yakin ingin menghapus guru ini beserta akunnya?')">
+
+                                                <button type="submit" class="btn-delete">
+                                                    Hapus
+                                                </button>
+                                            </form>
+
+                                        </div>
+                                    </td>
+                                </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+</div>
+
+<!-- MODAL TAMBAH GURU -->
+<div class="modal" id="addModal">
+    <div class="modal-content">
+
+        <div class="modal-heading">
+            <div>
+                <h2>Tambah Guru</h2>
+                <p>Isi informasi guru yang akan ditambahkan.</p>
+            </div>
+
+            <button onclick="closeModals()">×</button>
+        </div>
+
+        <form action="/admin/guru/tambah" method="POST">
+
+            <div class="form-group">
+                <label>Nama Guru</label>
+                <input
+                    type="text"
+                    name="nama_guru"
+                    placeholder="Masukkan nama guru"
+                    maxlength="100"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label>Jenis Kelamin</label>
+                <select name="jenis_kelamin" required>
+                    <option value="">Pilih jenis kelamin</option>
+                    <option value="L">Laki-laki</option>
+                    <option value="P">Perempuan</option>
+                </select>
+            </div>
+
+            <div class="modal-info">
+                Username dan password akun Guru akan dibuat otomatis.
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" class="btn-cancel" onclick="closeModals()">
+                    Batal
+                </button>
+
+                <button type="submit" class="btn-primary">
+                    Simpan Guru
+                </button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<!-- MODAL EDIT GURU -->
+<div class="modal" id="editModal">
+    <div class="modal-content">
+
+        <div class="modal-heading">
+            <div>
+                <h2>Edit Guru</h2>
+                <p>Perbarui informasi guru.</p>
+            </div>
+
+            <button onclick="closeModals()">×</button>
+        </div>
+
+        <form id="editForm" method="POST">
+
+            <div class="form-group">
+                <label>Nama Guru</label>
+                <input type="text" name="nama_guru" id="editNama" maxlength="100" required>
+            </div>
+
+            <div class="form-group">
+                <label>Jenis Kelamin</label>
+                <select name="jenis_kelamin" id="editGender" required>
+                    <option value="L">Laki-laki</option>
+                    <option value="P">Perempuan</option>
+                </select>
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" class="btn-cancel" onclick="closeModals()">
+                    Batal
+                </button>
+
+                <button type="submit" class="btn-primary">
+                    Simpan Perubahan
+                </button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<script src="/js/admin.js"></script>
+<script src="/js/guru.js"></script>
+
+</body>
+</html>

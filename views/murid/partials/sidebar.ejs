@@ -1,0 +1,61 @@
+<aside class="sidebar" id="sidebar">
+
+    <div class="sidebar-brand">
+        <div class="brand-icon">S</div>
+        <div>
+            <h2>SMASVP</h2>
+            <span>School Attendance</span>
+        </div>
+    </div>
+
+    <div class="sidebar-label">MENU MURID</div>
+
+    <nav class="sidebar-menu">
+
+        <a href="/murid" class="menu-item <%= activePage === 'dashboard' ? 'active' : '' %>">
+            <span class="menu-icon">▦</span>
+            <span>Dashboard</span>
+        </a>
+
+        <div class="sidebar-label">AKADEMIK</div>
+
+        <a href="/murid/jadwal" class="menu-item <%= activePage === 'jadwal' ? 'active' : '' %>">
+            <span class="menu-icon">◷</span>
+            <span>Jadwal Pelajaran</span>
+        </a>
+
+        <a href="/murid/riwayat" class="menu-item <%= activePage === 'riwayat' ? 'active' : '' %>">
+            <span class="menu-icon">▤</span>
+            <span>Riwayat Absensi</span>
+        </a>
+
+        <a href="/murid/rekap" class="menu-item <%= activePage === 'rekap' ? 'active' : '' %>">
+            <span class="menu-icon">▧</span>
+            <span>Rekap Kehadiran</span>
+        </a>
+
+        <div class="sidebar-label">AKUN</div>
+
+        <a href="/murid/profil" class="menu-item <%= activePage === 'profil' ? 'active' : '' %>">
+            <span class="menu-icon">♙</span>
+            <span>Profil Saya</span>
+        </a>
+
+    </nav>
+
+    <div class="sidebar-bottom">
+
+        <div class="sidebar-school">
+            <strong>SMASVP</strong>
+            <span>Sistem Informasi Sekolah</span>
+        </div>
+
+        <form action="/logout" method="POST">
+            <button type="submit" class="logout-button">
+                ↪ Keluar
+            </button>
+        </form>
+
+    </div>
+
+</aside>

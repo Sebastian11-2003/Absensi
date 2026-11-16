@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil Saya - SMASVP</title>
+
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="/css/guru.css">
+</head>
+<body>
+
+<div class="admin-layout">
+
+    <%- include('partials/sidebar', { activePage: 'profil' }) %>
+
+    <main class="main-content">
+
+        <%- include('partials/header', {
+            guru,
+            pageTitle: 'Profil Saya',
+            pageSubtitle: 'Informasi data pribadi dan akun Guru'
+        }) %>
+
+        <section class="dashboard-content">
+
+            <!-- PROFIL HEADER -->
+            <div class="profile-welcome">
+                <div class="profile-avatar">
+                    <%= guru.nama_guru.charAt(0).toUpperCase() %>
+                </div>
+
+                <div class="profile-welcome-info">
+                    <span class="welcome-label">PROFIL GURU</span>
+                    <h1><%= guru.nama_guru %></h1>
+                    <p>Informasi akun dan data pribadi Anda di SMASVP.</p>
+                </div>
+
+                <div class="profile-status">
+                    <% if (guru.status === 'active') { %>
+                        <span class="profile-status-badge active">
+                            ● Aktif
+                        </span>
+                    <% } else if (guru.status === 'suspended') { %>
+                        <span class="profile-status-badge suspended">
+                            ● Ditangguhkan
+                        </span>
+                    <% } else { %>
+                        <span class="profile-status-badge inactive">
+                            ● <%= guru.status %>
+                        </span>
+                    <% } %>
+                </div>
+            </div>
+
+            <!-- DATA PRIBADI -->
+            <div class="section-heading">
+                <div>
+                    <h2>Informasi Pribadi</h2>
+                    <p>Informasi identitas Guru yang terdaftar di sistem</p>
+                </div>
+            </div>
+
+            <div class="profile-card">
+
+                <div class="profile-card-header">
+                    <div class="profile-card-icon">♙</div>
+
+                    <div>
+                        <h3>Data Identitas</h3>
+                        <p>Informasi pribadi Guru</p>
+                    </div>
+                </div>
+
+                <div class="profile-information">
+
+                    <div class="profile-field">
+                        <span>Nama Lengkap</span>
+                        <strong><%= guru.nama_guru %></strong>
+                    </div>
+
+                    <div class="profile-field">
+                        <span>Jenis Kelamin</span>
+                        <strong><%= guru.jenis_kelamin || '-' %></strong>
+                    </div>
+
+                    <div class="profile-field">
+                        <span>ID Guru</span>
+                        <strong>#<%= guru.id %></strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- INFORMASI AKUN -->
+            <div class="section-heading profile-section-heading">
+                <div>
+                    <h2>Informasi Akun</h2>
+                    <p>Informasi akses akun Guru SMASVP</p>
+                </div>
+            </div>
+
+            <div class="profile-card">
+
+                <div class="profile-card-header">
+                    <div class="profile-card-icon account">⚙</div>
+
+                    <div>
+                        <h3>Detail Akun</h3>
+                        <p>Informasi akun yang digunakan untuk masuk</p>
+                    </div>
+                </div>
+
+                <div class="profile-information">
+
+                    <div class="profile-field">
+                        <span>Username</span>
+                        <strong><%= guru.username %></strong>
+                    </div>
+
+                    <div class="profile-field">
+                        <span>Role Akun</span>
+                        <strong>Guru</strong>
+                    </div>
+
+                    <div class="profile-field">
+                        <span>Status Akun</span>
+
+                        <strong>
+                            <% if (guru.status === 'active') { %>
+                                Aktif
+                            <% } else if (guru.status === 'suspended') { %>
+                                Ditangguhkan
+                            <% } else { %>
+                                <%= guru.status %>
+                            <% } %>
+                        </strong>
+                    </div>
+
+                </div>
+
+                <div class="profile-security-note">
+                    <span class="security-icon">ⓘ</span>
+                    <p>
+                        Data profil ini hanya dapat dikelola oleh Administrator.
+                        Hubungi Administrator apabila terdapat informasi yang
+                        perlu diperbaiki.
+                    </p>
+                </div>
+
+            </div>
+
+            <!-- FOOTER -->
+            <div class="dashboard-footer">
+                <span>© 2026 SMASVP</span>
+                <span>Sistem Informasi Absensi Sekolah</span>
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script src="/js/guru.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Murid - SMASVP</title>
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="/css/guru.css">
+</head>
+<body>
+
+<div class="admin-layout">
+
+    <%- include('partials/sidebar', { activePage: 'dashboard' }) %>
+
+    <main class="main-content">
+
+        <%- include('partials/header', {
+            murid,
+            pageTitle: 'Dashboard',
+            pageSubtitle: 'Ringkasan jadwal dan kehadiran Anda'
+        }) %>
+
+        <section class="dashboard-content">
+
+            <div class="welcome-section">
+                <div>
+                    <span class="welcome-label">HALO, MURID</span>
+                    <h1>Selamat Datang, <%= murid.nama_murid %>!</h1>
+                    <p>
+                        Kelas <%= murid.nama_kelas %>
+                        (<%= murid.tingkat %> <%= murid.jurusan %>) ·
+                        Berikut jadwal dan kehadiran Anda.
+                    </p>
+                </div>
+
+                <div class="welcome-date">
+                    <span id="currentDate"></span>
+                </div>
+            </div>
+
+            <div class="section-heading">
+                <div>
+                    <h2>Kehadiran Minggu Ini</h2>
+                    <p>Ringkasan catatan absensi Anda pada minggu berjalan</p>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <div class="stat-icon green">✓</div>
+                        <span class="stat-label">HADIR</span>
+                    </div>
+                    <h2><%= rekap.hadir %></h2>
+                    <p>Dari <%= rekap.total %> catatan absensi</p>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <div class="stat-icon orange">◷</div>
+                        <span class="stat-label">IZIN / SAKIT</span>
+                    </div>
+                    <h2><%= rekap.izin + rekap.sakit %></h2>
+                    <p><%= rekap.izin %> izin · <%= rekap.sakit %> sakit</p>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <div class="stat-icon purple">!</div>
+                        <span class="stat-label">ALPA</span>
+                    </div>
+                    <h2><%= rekap.alpa %></h2>
+                    <p>Tanpa keterangan</p>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <div class="stat-icon blue">▧</div>
+                        <span class="stat-label">PERSENTASE HADIR</span>
+                    </div>
+                    <h2><%= rekap.persentase %>%</h2>
+                    <p>Tingkat kehadiran minggu ini</p>
+                </div>
+
+            </div>
+
+            <div class="section-heading schedule-heading">
+                <div>
+                    <h2>Jadwal Pelajaran Hari Ini</h2>
+                    <p><%= hariIni %> · <%= tanggalHariIni %></p>
+                </div>
+
+                <a href="/murid/jadwal" class="text-link">Lihat Semua Jadwal →</a>
+            </div>
+
+            <div class="schedule-list">
+
+                <% if (jadwalHariIni.length === 0) { %>
+
+                    <div class="empty-state">
+                        <div class="empty-icon">◷</div>
+                        <h3>Tidak Ada Jadwal Pelajaran</h3>
+                        <p>Kelas Anda tidak memiliki jadwal pelajaran hari ini.</p>
+                    </div>
+
+                <% } else { %>
+
+                    <% jadwalHariIni.forEach((item) => { %>
+
+                        <div class="schedule-card">
+
+                            <div class="schedule-time">
+                                <strong><%= String(item.jam_mulai).slice(0, 5) %></strong>
+                                <span>sampai</span>
+                                <strong><%= String(item.jam_selesai).slice(0, 5) %></strong>
+                            </div>
+
+                            <div class="schedule-info">
+                                <h3><%= item.nama_mapel %></h3>
+                                <p>Guru: <%= item.nama_guru %></p>
+                            </div>
+
+                            <div class="schedule-action">
+                                <span class="schedule-badge">Jadwal Hari Ini</span>
+                            </div>
+
+                        </div>
+
+                    <% }) %>
+
+                <% } %>
+
+            </div>
+
+            <div class="dashboard-footer">
+                <span>© 2026 SMASVP</span>
+                <span>Sistem Informasi Absensi Sekolah</span>
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script src="/js/guru.js"></script>
+
+</body>
+</html>

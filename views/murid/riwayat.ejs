@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Riwayat Absensi - SMASVP</title>
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="/css/guru.css">
+</head>
+<body>
+
+<div class="admin-layout">
+
+    <%- include('partials/sidebar', { activePage: 'riwayat' }) %>
+
+    <main class="main-content">
+
+        <%- include('partials/header', {
+            murid,
+            pageTitle: 'Riwayat Absensi',
+            pageSubtitle: 'Catatan kehadiran Anda pada setiap mata pelajaran'
+        }) %>
+
+        <section class="dashboard-content">
+
+            <div class="page-intro guru-rekap-intro">
+                <div>
+                    <span class="welcome-label">AKADEMIK</span>
+                    <h1>Riwayat Absensi</h1>
+                    <p>Lihat seluruh catatan kehadiran Anda, diurutkan dari tanggal terbaru.</p>
+                </div>
+            </div>
+
+            <!-- FILTER -->
+            <div class="guru-rekap-filter">
+
+                <div class="guru-rekap-filter-heading">
+                    <div>
+                        <h3>Filter Riwayat</h3>
+                        <p>Pilih bulan dan status kehadiran.</p>
+                    </div>
+                </div>
+
+                <form action="/murid/riwayat" method="GET" class="guru-rekap-filter-form">
+
+                    <div class="guru-rekap-filter-group">
+                        <label for="bulan">Pilih Bulan</label>
+                        <input type="month" id="bulan" name="bulan" value="<%= bulan %>">
+                    </div>
+
+                    <div class="guru-rekap-filter-group">
+                        <label for="status">Status Kehadiran</label>
+                        <select id="status" name="status">
+                            <option value="">Semua Status</option>
+                            <% statusValid.forEach(s => { %>
+                                <option value="<%= s %>" <%= status === s ? 'selected' : '' %>><%= s %></option>
+                            <% }) %>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="guru-rekap-filter-button">
+                        Terapkan Filter
+                    </button>
+
+                </form>
+
+            </div>
+
+            <div class="guru-history-summary">
+                <div class="guru-history-summary-icon">▤</div>
+
+                <div>
+                    <span>Total Catatan</span>
+                    <strong><%= riwayat.length %></strong>
+                    <small>Catatan absensi yang ditampilkan</small>
+                </div>
+            </div>
+
+            <div class="guru-history-container">
+
+                <div class="guru-history-container-header">
+                    <div>
+                        <h3>Daftar Riwayat</h3>
+                        <p>Diurutkan dari tanggal terbaru</p>
+                    </div>
+                </div>
+
+                <% if (riwayat.length === 0) { %>
+
+                    <div class="guru-history-empty">
+                        <div class="guru-history-empty-icon">▤</div>
+                        <h3>Belum Ada Riwayat Absensi</h3>
+                        <p>Catatan kehadiran Anda akan muncul di halaman ini.</p>
+                    </div>
+
+                <% } else { %>
+
+                    <div class="guru-history-table-wrapper">
+                        <table class="guru-history-table">
+                            <thead>
+                                <tr>
+                                    <th>No.</th>
+                                    <th>Tanggal</th>
+                                    <th>Waktu</th>
+                                    <th>Mata Pelajaran</th>
+                                    <th>Guru</th>
+                                    <th>Status</th>
+                                    <th>Keterangan</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <% riwayat.forEach((item, index) => { %>
+
+                                    <tr>
+                                        <td><%= index + 1 %></td>
+
+                                        <td>
+                                            <strong><%= item.hari %></strong><br>
+                                            <small><%= item.tanggalTampil %></small>
+                                        </td>
+
+                                        <td><%= item.jamMulai %> - <%= item.jamSelesai %></td>
+
+                                        <td><strong><%= item.nama_mapel %></strong></td>
+
+                                        <td><%= item.nama_guru %></td>
+
+                                        <td>
+                                            <span class="guru-status-badge <%= item.status.toLowerCase() %>">
+                                                <%= item.status %>
+                                            </span>
+                                        </td>
+
+                                        <td><%= item.keterangan || '-' %></td>
+                                    </tr>
+
+                                <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+
+                <% } %>
+
+            </div>
+
+            <div class="guru-history-readonly-note">
+                <span>ⓘ</span>
+                <span>
+                    Halaman ini hanya menampilkan riwayat absensi.
+                    Hubungi guru atau Administrator apabila terdapat data yang tidak sesuai.
+                </span>
+            </div>
+
+            <div class="dashboard-footer">
+                <span>© 2026 SMASVP</span>
+                <span>Sistem Informasi Absensi Sekolah</span>
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script src="/js/guru.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,268 @@
+
+.jadwal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.jadwal-header h1 {
+    margin: 0 0 7px;
+    font-size: 25px;
+    color: #1e293b;
+}
+
+.jadwal-header p {
+    margin: 0;
+    color: #64748b;
+    font-size: 14px;
+}
+
+.btn-tambah,
+.btn-simpan {
+    border: none;
+    background: #2563eb;
+    color: white;
+    padding: 11px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.btn-tambah:hover,
+.btn-simpan:hover {
+    background: #1d4ed8;
+}
+
+.jadwal-container {
+    background: white;
+    padding: 22px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+}
+
+.jadwal-filter {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 22px;
+}
+
+.jadwal-filter div {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    min-width: 180px;
+}
+
+.jadwal-filter label,
+.form-group label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #334155;
+}
+
+.jadwal-filter select,
+.form-group select,
+.form-group input {
+    width: 100%;
+    padding: 11px 12px;
+    border: 1px solid #dbe2ea;
+    border-radius: 7px;
+    outline: none;
+    background: white;
+    font-size: 14px;
+}
+
+.jadwal-filter select:focus,
+.form-group select:focus,
+.form-group input:focus {
+    border-color: #3b82f6;
+}
+
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.jadwal-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 850px;
+}
+
+.jadwal-table th {
+    background: #f1f5f9;
+    color: #475569;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 14px 12px;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.jadwal-table td {
+    padding: 14px 12px;
+    border-bottom: 1px solid #edf0f4;
+    color: #334155;
+    font-size: 13px;
+}
+
+.jadwal-table tbody tr:hover {
+    background: #f8fafc;
+}
+
+.hari-badge {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 20px;
+    background: #eaf2ff;
+    color: #2563eb;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.aksi-jadwal {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.aksi-jadwal form {
+    margin: 0;
+}
+
+.btn-edit,
+.btn-hapus {
+    border: none;
+    padding: 7px 11px;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.btn-edit {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.btn-hapus {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.empty-data {
+    text-align: center;
+    padding: 25px !important;
+    color: #94a3b8 !important;
+}
+
+.modal-jadwal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(15, 23, 42, .55);
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+}
+
+.modal-jadwal.active {
+    display: flex;
+}
+
+.modal-jadwal-content {
+    background: white;
+    width: 100%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    border-radius: 12px;
+    padding: 24px;
+}
+
+.modal-jadwal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 22px;
+}
+
+.modal-jadwal-header h2 {
+    margin: 0;
+    font-size: 20px;
+    color: #1e293b;
+}
+
+.tutup-modal {
+    border: none;
+    background: transparent;
+    font-size: 27px;
+    color: #64748b;
+    cursor: pointer;
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 7px;
+}
+
+.form-row-jadwal {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.modal-jadwal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 22px;
+}
+
+.btn-batal {
+    border: 1px solid #cbd5e1;
+    background: white;
+    color: #475569;
+    padding: 10px 17px;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+.alert {
+    padding: 12px 16px;
+    margin-bottom: 18px;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.alert-success {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.alert-error {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+@media (max-width: 650px) {
+    .jadwal-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .jadwal-filter {
+        flex-direction: column;
+    }
+
+    .jadwal-filter div {
+        width: 100%;
+    }
+}

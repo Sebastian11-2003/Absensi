@@ -1,0 +1,176 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Murid - SMASVP</title>
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="/css/murid.css">
+</head>
+<body>
+
+    <%- include('partials/sidebar') %>
+
+    <main class="main-content">
+        <%- include('partials/header') %>
+
+        <section class="murid-page">
+            <div class="page-heading">
+                <div>
+                    <h1>Data Murid</h1>
+                    <p>Kelola data murid dan akun login SMASVP.</p>
+                </div>
+
+                <button class="btn-primary" onclick="openModal('modalTambah')">
+                    + Tambah Murid
+                </button>
+            </div>
+
+            <% if (createdAccount) { %>
+                <div class="account-success">
+                    <h3>Akun murid berhasil dibuat!</h3>
+                    <p>Nama: <strong><%= createdAccount.nama %></strong></p>
+                    <p>Username: <strong><%= createdAccount.username %></strong></p>
+                    <p>Password: <strong><%= createdAccount.password %></strong></p>
+                    <small>Simpan informasi login ini. Password hanya ditampilkan sekali.</small>
+                </div>
+            <% } %>
+
+            <div class="table-card">
+                <div class="table-heading">
+                    <h3>Daftar Murid</h3>
+                    <span><%= murid.length %> murid</span>
+                </div>
+
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Nama Murid</th>
+                                <th>Jenis Kelamin</th>
+                                <th>Kelas</th>
+                                <th>Username</th>
+                                <th>Status Akun</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (murid.length === 0) { %>
+                                <tr>
+                                    <td colspan="7" class="empty-data">Belum ada data murid.</td>
+                                </tr>
+                            <% } %>
+
+                            <% murid.forEach((m, index) => { %>
+                                <tr>
+                                    <td><%= index + 1 %></td>
+                                    <td><strong><%= m.nama_murid %></strong></td>
+                                    <td><%= m.jenis_kelamin === 'L' ? 'Laki-laki' : 'Perempuan' %></td>
+                                    <td><%= m.nama_kelas %></td>
+                                    <td><%= m.username || '-' %></td>
+                                    <td>
+                                        <span class="status <%= m.status === 'aktif' ? 'active' : 'inactive' %>">
+                                            <%= m.status || 'Belum ada akun' %>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="btn-edit"
+                                                onclick='editMurid(<%- JSON.stringify({
+                                                    id: m.id,
+                                                    nama: m.nama_murid,
+                                                    jk: m.jenis_kelamin,
+                                                    kelas: m.kelas_id
+                                                }).replace(/</g, "\\u003c") %>)'>
+                                                Edit
+                                            </button>
+
+                                            <form action="/admin/murid/status/<%= m.id %>" method="POST">
+                                                <button class="btn-status" type="submit">
+                                                    <%= m.status === 'aktif' ? 'Nonaktifkan' : 'Aktifkan' %>
+                                                </button>
+                                            </form>
+
+                                            <form action="/admin/murid/hapus/<%= m.id %>" method="POST"
+                                                onsubmit="return confirm('Yakin ingin menghapus murid ini beserta akun loginnya?')">
+                                                <button class="btn-delete" type="submit">Hapus</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- MODAL TAMBAH -->
+    <div class="modal" id="modalTambah">
+        <div class="modal-content">
+            <div class="modal-heading">
+                <h2>Tambah Murid</h2>
+                <button type="button" onclick="closeModal('modalTambah')">&times;</button>
+            </div>
+
+            <form action="/admin/murid/tambah" method="POST">
+                <label>Nama Murid</label>
+                <input type="text" name="nama_murid" required placeholder="Masukkan nama murid">
+
+                <label>Jenis Kelamin</label>
+                <select name="jenis_kelamin" required>
+                    <option value="">Pilih jenis kelamin</option>
+                    <option value="L">Laki-laki</option>
+                    <option value="P">Perempuan</option>
+                </select>
+
+                <label>Kelas</label>
+                <select name="kelas_id" required>
+                    <option value="">Pilih kelas</option>
+                    <% kelas.forEach(k => { %>
+                        <option value="<%= k.id %>"><%= k.nama_kelas %></option>
+                    <% }) %>
+                </select>
+
+                <button type="submit" class="btn-primary full-button">Simpan Murid</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL EDIT -->
+    <div class="modal" id="modalEdit">
+        <div class="modal-content">
+            <div class="modal-heading">
+                <h2>Edit Murid</h2>
+                <button type="button" onclick="closeModal('modalEdit')">&times;</button>
+            </div>
+
+            <form id="formEdit" method="POST">
+                <label>Nama Murid</label>
+                <input type="text" name="nama_murid" id="editNama" required>
+
+                <label>Jenis Kelamin</label>
+                <select name="jenis_kelamin" id="editJk" required>
+                    <option value="L">Laki-laki</option>
+                    <option value="P">Perempuan</option>
+                </select>
+
+                <label>Kelas</label>
+                <select name="kelas_id" id="editKelas" required>
+                    <% kelas.forEach(k => { %>
+                        <option value="<%= k.id %>"><%= k.nama_kelas %></option>
+                    <% }) %>
+                </select>
+
+                <button type="submit" class="btn-primary full-button">Simpan Perubahan</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="/js/admin.js"></script>
+    <script src="/js/murid.js"></script>
+</body>
+</html>
